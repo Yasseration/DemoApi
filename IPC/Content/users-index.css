@@ -1,0 +1,19 @@
+﻿/**** navbar active link ****/
+#users {
+    background-Color: var(--main-hv-color);
+}
+
+    #users a text, #users a text:hover {
+        color: white !important;
+    }
+
+@media screen and (max-width: 768px) {
+    #users {
+        background-Color: rgba(0,0,0,0);
+    }
+
+        #users a text, #users a text:hover {
+            color: var(--main-hv-color) !important;
+        }
+}
+/***************************/

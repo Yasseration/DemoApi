@@ -1,0 +1,97 @@
+﻿@model IPC.Models.User
+
+@{
+    ViewBag.Title = "Edit User";
+}
+
+@section style
+{
+    <link rel="stylesheet" href="~/Content/profile.css" />
+}
+<div class="container content center-vertical">
+    <div class="row">
+        <div class="col-md-10 offset-md-1" style="margin-top:70px;">
+            <div class="col-lg-8 offset-lg-2 px-3 px-sm-5 custom-form">
+                <div id="form-header">
+                    <div id="img-container">
+                        <div class="w-100">
+                            <input type="file" id="upload" name="upload" class="d-none" accept=".png, .jpg, .jpeg" />
+                            @if (Model.Img != null)
+                            {
+                                var base64 = Convert.ToBase64String(Model.Img);
+                                var imgsrc = string.Format("data:image/jpg;base64,{0}", base64);
+                                <a id="upload-img" title="User Image" href="#">
+                                    <img src='@imgsrc' class="img-thumbnail" alt="profile picture" />
+                                </a>
+                            }
+                            else
+                            {
+                                <a id="upload-img" title="User Image" href="#">
+                                    <img src="~/Content/Images/user.png" class="img-thumbnail" alt="profile picture" />
+                                </a>
+                            }
+                        </div>
+                    </div>
+                    <h2 style="margin:-75px 0 16px" class="text-uppercase">User Details</h2>
+                </div>
+                <div class="input-group" title="Full Name">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.FullName, new { htmlAttributes = new { @class = "form-control", placeholder = "Full Name", disabled=true } })
+                </div>
+                <div class="error-msg">
+                </div>
+
+                <div class="input-group" title="Email Address">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                    </div>
+                    @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control", placeholder = "Email Address", disabled = true } })
+                </div>
+                <div class="error-msg">
+                </div>
+
+                <div class="input-group" title="Password">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                    </div>
+                    @Html.TextBoxFor(model => model.PW,new { @class = "form-control", placeholder = "Password",@type="text", disabled = true })
+                </div>
+                <div class="error-msg">
+                </div>
+
+                <div class="d-sm-flex">
+                    <div class="col-sm-6 px-0 pr-md-2">
+
+                        <div class="input-group" title="Age">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-user"></i></span>
+                            </div>
+                            @Html.EditorFor(model => model.Age, new { htmlAttributes = new { @class = "form-control", placeholder = "Age", disabled = true } })
+                        </div>
+                        <div class="error-msg">
+                        </div>
+                    </div>
+                    <div class="col-sm-6 px-0 pl-md-2">
+                        <div class="input-group" title="Roles">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"><i class="far fa-user"></i></span>
+                            </div>
+                            @Html.DropDownList("RoleID", null, "Please Select Role", htmlAttributes: new { @class = "custom-select", disabled = true })
+                        </div>
+                        <div class="error-msg">
+                        </div>
+                    </div>
+                </div>
+                <div class="w-100 text-center mb-2">
+                    <a href="@Url.Action("Index","Users",new {id=Model.ID})" class="btn btn-primary w-100">Back to list</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/profile.js"></script>
+}

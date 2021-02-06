@@ -1,0 +1,161 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="IPCDatabaseModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Roles">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="RoleName" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Age" Type="smallint" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="320" Nullable="false" />
+          <Property Name="PW" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Img" Type="varbinary(max)" />
+          <Property Name="RoleID" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__Users__RoleID__3C69FB99">
+          <End Role="Roles" Type="Self.Roles" Multiplicity="1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Function Name="sp_InsertUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="UserID" Type="uniqueidentifier" Mode="In" />
+          <Parameter Name="FullName" Type="nvarchar" Mode="In" />
+          <Parameter Name="Age" Type="smallint" Mode="In" />
+          <Parameter Name="Email" Type="nvarchar" Mode="In" />
+          <Parameter Name="PW" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="Img" Type="varbinary(max)" Mode="In" />
+          <Parameter Name="RoleID" Type="uniqueidentifier" Mode="In" />
+        </Function>
+        <EntityContainer Name="IPCDatabaseModelStoreContainer">
+          <EntitySet Name="Roles" EntityType="Self.Roles" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Users__RoleID__3C69FB99" Association="Self.FK__Users__RoleID__3C69FB99">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="IPCDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Role">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Users" Relationship="Self.FK__Users__RoleID__3C69FB99" FromRole="Roles" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Guid" Nullable="false" />
+          <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Age" Type="Int16" Nullable="false" />
+          <Property Name="Email" Type="String" MaxLength="320" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="PW" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Img" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="RoleID" Type="Guid" Nullable="false" />
+          <NavigationProperty Name="Role" Relationship="Self.FK__Users__RoleID__3C69FB99" FromRole="Users" ToRole="Roles" />
+        </EntityType>
+        <Association Name="FK__Users__RoleID__3C69FB99">
+          <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+          <End Role="Users" Type="Self.User" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Roles">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="RoleID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="IPCDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Roles" EntityType="Self.Role" />
+          <EntitySet Name="Users" EntityType="Self.User" />
+          <AssociationSet Name="FK__Users__RoleID__3C69FB99" Association="Self.FK__Users__RoleID__3C69FB99">
+            <End Role="Roles" EntitySet="Roles" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <FunctionImport Name="sp_InsertUser">
+            <Parameter Name="UserID" Mode="In" Type="Guid" />
+            <Parameter Name="FullName" Mode="In" Type="String" />
+            <Parameter Name="Age" Mode="In" Type="Int16" />
+            <Parameter Name="Email" Mode="In" Type="String" />
+            <Parameter Name="PW" Mode="In" Type="String" />
+            <Parameter Name="Img" Mode="In" Type="Binary" />
+            <Parameter Name="RoleID" Mode="In" Type="Guid" />
+          </FunctionImport>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="IPCDatabaseModelStoreContainer" CdmEntityContainer="IPCDatabaseEntities">
+          <EntitySetMapping Name="Roles">
+            <EntityTypeMapping TypeName="IPCDatabaseModel.Role">
+              <MappingFragment StoreEntitySet="Roles">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="RoleName" ColumnName="RoleName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="IPCDatabaseModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="PW" ColumnName="PW" />
+                <ScalarProperty Name="Img" ColumnName="Img" />
+                <ScalarProperty Name="RoleID" ColumnName="RoleID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="sp_InsertUser" FunctionName="IPCDatabaseModel.Store.sp_InsertUser" />
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="IPCDatabaseModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Role">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="RoleName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRoles__RoleI__3F466844" FromRole="Roles" ToRole="UserRoles" />
+  </EntityType>
+  <EntityType Name="UserRole">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="RoleID" Type="Guid" Nullable="false" />
+    <Property Name="UserID" Type="Guid" Nullable="false" />
+    <Property Name="Notes" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Role" Relationship="Self.FK__UserRoles__RoleI__3F466844" FromRole="UserRoles" ToRole="Roles" />
+    <NavigationProperty Name="User" Relationship="Self.FK__UserRoles__UserI__403A8C7D" FromRole="UserRoles" ToRole="Users" />
+  </EntityType>
+  <EntityType Name="User">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Guid" Nullable="false" />
+    <Property Name="FullName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Age" Type="Int16" Nullable="false" />
+    <Property Name="Email" Type="String" MaxLength="320" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="PW" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="Img" Type="Binary" MaxLength="Max" FixedLength="false" />
+    <NavigationProperty Name="UserRoles" Relationship="Self.FK__UserRoles__UserI__403A8C7D" FromRole="Users" ToRole="UserRoles" />
+  </EntityType>
+  <Association Name="FK__UserRoles__RoleI__3F466844">
+    <End Role="Roles" Type="Self.Role" Multiplicity="1" />
+    <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Roles">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserRoles">
+        <PropertyRef Name="RoleID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__UserRoles__UserI__403A8C7D">
+    <End Role="Users" Type="Self.User" Multiplicity="1" />
+    <End Role="UserRoles" Type="Self.UserRole" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="UserRoles">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="IPCDatabaseEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Roles" EntityType="Self.Role" />
+    <EntitySet Name="UserRoles" EntityType="Self.UserRole" />
+    <EntitySet Name="Users" EntityType="Self.User" />
+    <AssociationSet Name="FK__UserRoles__RoleI__3F466844" Association="Self.FK__UserRoles__RoleI__3F466844">
+      <End Role="Roles" EntitySet="Roles" />
+      <End Role="UserRoles" EntitySet="UserRoles" />
+    </AssociationSet>
+    <AssociationSet Name="FK__UserRoles__UserI__403A8C7D" Association="Self.FK__UserRoles__UserI__403A8C7D">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="UserRoles" EntitySet="UserRoles" />
+    </AssociationSet>
+    <FunctionImport Name="SP_EnrollUser">
+      <Parameter Name="UserID" Mode="In" Type="Guid" />
+      <Parameter Name="RoleID" Mode="In" Type="Guid" />
+      <Parameter Name="Notes" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+</Schema>
